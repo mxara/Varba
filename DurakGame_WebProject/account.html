@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <title>Account</title>
+</head>
+<body>
+    <div class="account-container">
+        <div class="profile-info">
+            <img id="profilePhoto" src="default-profile-photo.jpg" alt="Profile Photo" class="profile-photo">
+            <span id="username">@username</span>
+            <button id="editBtn" class="edit-btn">Edit</button>
+            <button id="choosePhotoBtn" class="choose-photo-btn" style="display: none;">Choose New Photo</button>
+            <input type="file" id="photoInput" style="display: none;" />
+        </div>
+    </div>
+
+    <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+        import { auth, db, storage } from "./firebase.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const profilePhoto = document.querySelector('#profilePhoto');
+            const usernameElement = document.querySelector('#username');
+            const editBtn = document.querySelector('#editBtn');
+            const choosePhotoBtn = document.querySelector('#choosePhotoBtn');
+            const photoInput = document.querySelector('#photoInput');
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    const userDocRef = doc(db, "users", user.uid);
+                    onSnapshot(userDocRef, (docSnapshot) => {
+                        if (docSnapshot.exists()) {
+                            const userData = docSnapshot.data();
+                            profilePhoto.src = userData.userphoto || 'default-profile-photo.jpg'; // Fallback to a default photo
+                            usernameElement.textContent = userData.username;
+                        }
+                    });
+
+                    editBtn.addEventListener('click', () => {
+                        choosePhotoBtn.style.display = 'block';
+                        photoInput.style.display = 'block';
+                    });
+
+                    choosePhotoBtn.addEventListener('click', () => {
+                        photoInput.click();
+                    });
+
+                    photoInput.addEventListener('change', (event) => {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const storageRef = ref(storage, `profilePhotos/${user.uid}/${file.name}`);
+                            uploadBytes(storageRef, file).then((snapshot) => {
+                                return getDownloadURL(snapshot.ref);
+                            }).then((downloadURL) => {
+                                const userDocRef = doc(db, "users", user.uid);
+                                return userDocRef.update({ userphoto: downloadURL });
+                            }).then(() => {
+                                // Photo uploaded and URL updated in Firestore
+                                console.log('Photo uploaded and URL updated.');
+                                photoInput.value = ''; // Clear the input
+                            }).catch((error) => {
+                                console.error('Error uploading photo:', error);
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

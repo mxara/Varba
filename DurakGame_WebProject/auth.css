@@ -1,0 +1,127 @@
+html {
+    height: 100%;
+}
+
+body {
+    font-family: "Oswald", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url("invCArds-removebg-preview.png") no-repeat center center fixed;
+    background-size: cover;
+    background-color: #00aeff;
+    height: 100%;
+    margin: 0;
+    box-shadow: inset 0px 0px 180px rgba(0, 0, 0, 0.349);
+}
+
+.bg2 {
+    position: absolute;
+    z-index: -1;
+    background: url("CardsBg.png") no-repeat center center fixed;
+    background-size: cover;
+    opacity: 0.4;
+    width: 100%;
+    height: 100%;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 350px;
+    height: auto;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    text-align: center; /* Center text inside the container */
+}
+
+#registerForm h2 {
+    color: #ffffff;
+    font-size: 24px;
+    margin-top: -25px; /* Зменшити відступ знизу заголовка */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+#registerForm img {
+    width: 200px; /* Збільшити розмір зображення */
+    height: auto;
+    margin: 20px auto 10px auto; /* Відступи: 20px зверху, автоматичне центрування по горизонталі, 10px знизу */
+}
+
+#registerForm input {
+    margin: 12px 0;
+    padding: 12px;
+    width: 100%;
+    max-width: 280px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    font-size: 16px;
+    color: #fff;
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+#registerForm input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#registerForm button {
+    margin-top: 20px;
+    padding: 12px;
+    width: 100%;
+    max-width: 280px;
+    background: linear-gradient(135deg, #0D4F8B, #0072B5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#registerForm button:hover {
+    background: linear-gradient(135deg, #004a72, #005b96);
+}
+
+#registerForm button:active {
+    background: linear-gradient(135deg, #003b5c, #004e7a);
+    transform: scale(0.98);
+}
+
+.login-link-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.login-link-container p {
+    margin: 0;
+    font-size: 14px;
+    color: white;
+}
+
+#loginBtn {
+    background: linear-gradient(135deg, #0D4F8B, #0072B5);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block; /* Ensure the button does not stretch to full width */
+}
+
+#loginBtn:hover {
+    background: linear-gradient(135deg, #004a72, #005b96);
+}
+
+#loginBtn:active {
+    background: linear-gradient(135deg, #003b5c, #004e7a);
+    transform: scale(0.98);
+}

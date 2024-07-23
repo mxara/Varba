@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css"> <!-- Підключення стилів -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <title>Varba Login</title>
+</head>
+<body>
+    <div class="bg2"></div>
+    <div class="form-container">
+        <form id="loginForm">
+            <img src="varba1.png" alt="Varba Logo">
+            <h2>Welcome Back to Varba 🃏</h2>
+            <input type="text" id="usernameOrEmail" placeholder="Username or Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Log In</button>
+            <p id="loginError" style="color: red; text-align: center; margin-top: 10px;"></p>
+        </form>
+        <div class="login-link-container">
+            <p id="logintext" style="color: white;">Don't have an account?</p>
+            <button id="registerBtn">Register</button>
+            <button id="loginWithGoogle">
+                <img src="google2.png" alt="Google Icon">
+                <span>Log In with Google</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="auth.js" type="module"></script>
+    <script src="login.js" type="module"></script>
+</body>
+</html>

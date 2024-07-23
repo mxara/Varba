@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <title>Varba Registration</title>
+</head>
+<body>
+    <div class="bg2"></div>
+    <div class="form-container">
+        <form id="registerForm">
+            <img src="varba1.png" class="logo-image" alt="Varba Logo">
+            <h2>Welcome to Varba 🃏</h2>
+            <input type="text" id="username" placeholder="@Username" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            <button type="submit">Register</button>
+        </form>
+        <div class="login-link-container">
+            <p id="logintext">Already have an account?</p>
+            <button id="loginBtn">Log In</button>
+        </div>
+    </div>
+
+    <script src="auth.js" type="module"></script>
+    <script src="login.js" type="module"></script>
+</body>
+</html>

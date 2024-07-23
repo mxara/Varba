@@ -1,37 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-        <title>Document</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <title>Varba</title>
+</head>
+<body>
+    <div class="enemysCards">
+        <div class="card1"></div>
+        <div class="card2"></div>
+        <div class="card3"></div>
+        <div class="card4"></div>
+        <div class="card5"></div>
+        <div class="card6"></div>
+    </div>
+    <div class="yourCards">
+        <div class="card7"></div>
+        <div class="card8"></div>
+        <div class="card9"></div>
+        <div class="card10"></div>
+        <div class="card11"></div>
+        <div class="card12"></div>
+        <button class="Acts">Pass</button>
+    </div>
+    <div class="bg2"></div>
 
-    <body>
-        <div class="enemysCards">
-            <div class="card1"></div>
-            <div class="card2"></div>
-            <div class="card3"></div>
-            <div class="card4"></div>
-            <div class="card5"></div>
-            <div class="card6"></div>
+    <div class="register-button-container">
+        <button id="registerBtn">Register</button>
+        <button id="loginBtn">Log In</button>
+    </div>
+
+    <div id="userInfoContainer" style="display: none;">
+        <div class="profile-container">
+            <img src="default-profile-photo.jpg" alt="Profile Photo" class="profile-photo">
+            <div class="username-info">
+                <span class="username" id="username">@username</span>
+                <div class="money-info">
+                    <img src="moneycard.png" alt="Money Photo" class="money-photo">
+                    <span class="cards-count" id="cardsCount">0 cards</span>
+                </div>
+                <button id="logOffBtn" class="log-off-btn">Log Off</button>
+                <button id="myAccountBtn" class="my-account-btn">My Account</button> <!-- Added button -->
+            </div>
         </div>
-        <div class="yourCards">
-            <div class="card7"></div>
-            <div class="card8"></div>
-            <div class="card9"></div>
-            <div class="card10"></div>
-            <div class="card11"></div>
-            <div class="card12"></div>
+    </div>
 
-            <button class="Acts">Pass</button>
-        </div>
-        <div class="bg2"></div>
+    <script type="module">
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, collection, query } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+        import { auth, db } from "./firebase.js";
 
-        <!-- --------------- -->
-        <script src="script.JS"></script>
-    </body>
+        document.addEventListener('DOMContentLoaded', () => {
+            const registerBtn = document.querySelector('#registerBtn');
+            const loginBtn = document.querySelector('#loginBtn'); // Add reference to Log In button
+            const userInfoContainer = document.querySelector('#userInfoContainer');
+            const usernameElement = document.querySelector('#username');
+            const cardsCountElement = document.querySelector('#cardsCount');
+            const profilePhotoElement = document.querySelector('.profile-photo');
+            const logOffBtn = document.querySelector('#logOffBtn');
+            const myAccountBtn = document.querySelector('#myAccountBtn'); // Add reference to My Account button
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    // User is signed in
+                    const userDocRef = doc(db, "users", user.uid);
+                    onSnapshot(userDocRef, (docSnapshot) => {
+                        if (docSnapshot.exists()) {
+                            // User exists in Firestore
+                            const userData = docSnapshot.data();
+                            registerBtn.style.display = 'none';
+                            loginBtn.style.display = 'none'; // Hide Log In button when logged in
+                            userInfoContainer.style.display = 'block';
+
+                            // Update the profile photo source, username, and cards count
+                            profilePhotoElement.src = userData.userphoto || 'default-profile-photo.jpg'; // Fallback to a default photo
+                            usernameElement.textContent = `${userData.username}`;
+                            cardsCountElement.textContent = `${userData.cards || 0} cards`;
+                        } else {
+                            // User is not in Firestore
+                            registerBtn.style.display = 'block';
+                            loginBtn.style.display = 'none'; // Hide Log In button when not logged in
+                            userInfoContainer.style.display = 'none';
+                        }
+                    });
+
+                    // Real-time updates for enemy and user cards
+                    const enemyCardsQuery = query(collection(db, "enemyCards"));
+                    onSnapshot(enemyCardsQuery, (querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            const data = doc.data();
+                            // Update enemy cards based on the data
+                            const cardElement = document.querySelector(`.card${data.cardNumber}`);
+                            if (cardElement) {
+                                cardElement.style.backgroundImage = `url(${data.cardImage})`; // Update the card's image
+                            }
+                        });
+                    });
+
+                    const userCardsQuery = query(collection(db, "userCards"));
+                    onSnapshot(userCardsQuery, (querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            const data = doc.data();
+                            // Update user cards based on the data
+                            const cardElement = document.querySelector(`.card${data.cardNumber}`);
+                            if (cardElement) {
+                                cardElement.style.backgroundImage = `url(${data.cardImage})`; // Update the card's image
+                            }
+                        });
+                    });
+                } else {
+                    // No user is signed in
+                    registerBtn.style.display = 'block';
+                    loginBtn.style.display = 'block'; // Show Log In button when not logged in
+                    userInfoContainer.style.display = 'none';
+                }
+            });
+
+            registerBtn.addEventListener('click', () => {
+                window.location.href = 'auth.html';
+            });
+
+            loginBtn.addEventListener('click', () => {
+                window.location.href = 'login.html';
+            });
+
+            myAccountBtn.addEventListener('click', () => {
+                window.location.href = 'account.html'; // Redirect to account page
+            });
+
+            logOffBtn.addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    // Sign-out successful.
+                    window.location.href = 'auth.html'; // Redirect to the login page or another appropriate page
+                }).catch((error) => {
+                    // An error happened.
+                    console.error('Sign Out Error', error);
+                });
+            });
+        });
+    </script>
+</body>
 </html>
