@@ -18,6 +18,13 @@
         <div class="card5"></div>
         <div class="card6"></div>
     </div>
+
+    <div class="battle-field">
+        <div class="card13">
+            <div class="card14"></div>
+        </div>
+    </div>
+
     <div class="yourCards">
         <div class="card7"></div>
         <div class="card8"></div>
@@ -38,15 +45,21 @@
         <div class="profile-container">
             <img src="default-profile-photo.jpg" alt="Profile Photo" class="profile-photo">
             <div class="username-info">
-                <span class="username" id="username">@username</span>
+                <div class="username-checkmark-container">
+                    <span class="username" id="username">@username</span>
+                    <img id="verifiedCheckmark" src="" alt="Verified Checkmark" class="verified-checkmark" style="display: none;">
+                </div>
                 <div class="money-info">
                     <img src="moneycard.png" alt="Money Photo" class="money-photo">
                     <span class="cards-count" id="cardsCount">0 cards</span>
                 </div>
-                <button id="logOffBtn" class="log-off-btn">Log Off</button>
-                <button id="myAccountBtn" class="my-account-btn">My Account</button> <!-- Added button -->
+                <!-- <button id="logOffBtn" class="log-off-btn">Log Off</button> -->
+                <button id="myAccountBtn" class="my-account-btn">My Account</button>
+                <button id="messagesBtn" class="messages-btn">Messages</button>
+
             </div>
         </div>
+        
     </div>
 
     <script type="module">
@@ -62,7 +75,10 @@
             const cardsCountElement = document.querySelector('#cardsCount');
             const profilePhotoElement = document.querySelector('.profile-photo');
             const logOffBtn = document.querySelector('#logOffBtn');
-            const myAccountBtn = document.querySelector('#myAccountBtn'); // Add reference to My Account button
+            const myAccountBtn = document.querySelector('#myAccountBtn'); 
+            const messagesBtn = document.querySelector('#messagesBtn')
+            
+            const verifiedCheckmark = document.querySelector('#verifiedCheckmark');
 
             onAuthStateChanged(auth, (user) => {
                 if (user) {
@@ -80,6 +96,14 @@
                             profilePhotoElement.src = userData.userphoto || 'default-profile-photo.jpg'; // Fallback to a default photo
                             usernameElement.textContent = `${userData.username}`;
                             cardsCountElement.textContent = `${userData.cards || 0} cards`;
+
+                            // Show checkmark if galochka field exists
+                            if (userData.galochka) {
+                                verifiedCheckmark.src = userData.galochka; // Set the URL of the checkmark image
+                                verifiedCheckmark.style.display = 'inline'; // Display the checkmark
+                            } else {
+                                verifiedCheckmark.style.display = 'none'; // Hide the checkmark
+                            }
                         } else {
                             // User is not in Firestore
                             registerBtn.style.display = 'block';
@@ -132,6 +156,10 @@
                 window.location.href = 'account.html'; // Redirect to account page
             });
 
+            messagesBtn.addEventListener('click', () => {
+                window.location.href = 'messages.html'; // Redirect to the messages page
+            });
+
             logOffBtn.addEventListener('click', () => {
                 signOut(auth).then(() => {
                     // Sign-out successful.
@@ -143,5 +171,7 @@
             });
         });
     </script>
+
+    <script src="script.js"></script>
 </body>
 </html>

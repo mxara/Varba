@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="messages.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <title>Messages</title>
+</head>
+<body>
+    <div class="sidebar">
+        <!-- User list -->
+        <div class="user-list-item" data-user-id="1">
+            <img src="default-profile-photo.jpg" alt="User Photo">
+            <span class="username">User1</span>
+            <img src="" alt="Verified Checkmark" class="verified-checkmark" style="display: none;">
+        </div>
+        <!-- Add more user list items here -->
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <img src="default-profile-photo.jpg" alt="User Photo">
+            <div class="username-checkmark-container">
+                <span class="username">User1</span>
+                <img src="" alt="Verified Checkmark" class="verified-checkmark" style="display: none;">
+            </div>
+        </div>
+        <div class="message-box" id="messageBox">
+            <!-- Messages will be displayed here -->
+        </div>
+        <div class="message-input">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button id="sendMessageBtn">Send</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, collection, query, where, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+        import { auth, db } from "./firebase.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatHeader = document.querySelector('.chat-header');
+            const messageBox = document.getElementById('messageBox');
+            const messageInput = document.getElementById('messageInput');
+            const sendMessageBtn = document.getElementById('sendMessageBtn');
+            let selectedUserId = null;
+            let currentUserId = null;
+
+            // Load users from Firestore
+            const userListQuery = query(collection(db, "users"));
+            onSnapshot(userListQuery, (querySnapshot) => {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.innerHTML = ''; // Clear existing items
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    const userListItem = document.createElement('div');
+                    userListItem.className = 'user-list-item';
+                    userListItem.setAttribute('data-user-id', doc.id);
+                    userListItem.innerHTML = `
+                        <img src="${data.userphoto || 'default-profile-photo.jpg'}" alt="User Photo">
+                        <span class="username">${data.username}</span>
+                        ${data.galochka ? `<img src="${data.galochka}" alt="Verified Checkmark" class="verified-checkmark">` : ''}
+                    `;
+                    sidebar.appendChild(userListItem);
+                });
+            });
+
+            // Handle user list item click
+            document.querySelector('.sidebar').addEventListener('click', (event) => {
+                const userId = event.target.closest('.user-list-item')?.getAttribute('data-user-id');
+                if (userId) {
+                    selectedUserId = userId;
+                    loadChat(userId);
+                }
+            });
+
+            // Load chat with selected user
+            function loadChat(userId) {
+                // Clear the chat header and messages
+                chatHeader.innerHTML = `
+                    <img src="default-profile-photo.jpg" alt="User Photo">
+                    <div class="username-checkmark-container">
+                        <span class="username">Loading...</span>
+                    </div>
+                `;
+                messageBox.innerHTML = ''; // Clear previous messages
+
+                // Load chat header and messages
+                const userDocRef = doc(db, "users", userId);
+                onSnapshot(userDocRef, (docSnapshot) => {
+                    const userData = docSnapshot.data();
+                    chatHeader.querySelector('img').src = userData.userphoto || 'default-profile-photo.jpg';
+                    chatHeader.querySelector('.username').textContent = userData.username;
+                    if (userData.galochka) {
+                        chatHeader.querySelector('.verified-checkmark').src = userData.galochka;
+                        chatHeader.querySelector('.verified-checkmark').style.display = 'inline';
+                    } else {
+                        chatHeader.querySelector('.verified-checkmark').style.display = 'none';
+                    }
+                });
+
+                const messagesQuery = query(collection(db, `messages/${currentUserId}/${userId}`));
+                onSnapshot(messagesQuery, (querySnapshot) => {
+                    messageBox.innerHTML = ''; // Clear previous messages
+                    querySnapshot.forEach((doc) => {
+                        const messageData = doc.data();
+                        const messageElement = document.createElement('div');
+                        messageElement.className = 'message';
+                        messageElement.textContent = messageData.text;
+                        messageElement.classList.add(messageData.userId === currentUserId ? 'sent' : 'received');
+                        messageBox.appendChild(messageElement);
+                    });
+                });
+            }
+
+            // Send a message
+            sendMessageBtn.addEventListener('click', async () => {
+                const messageText = messageInput.value;
+                if (messageText && selectedUserId) {
+                    await addDoc(collection(db, `messages/${currentUserId}/${selectedUserId}`), {
+                        userId: currentUserId,
+                        text: messageText,
+                        timestamp: serverTimestamp()
+                    });
+                    messageInput.value = ''; // Clear input
+                }
+            });
+
+            // Get current user ID
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    currentUserId = user.uid;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

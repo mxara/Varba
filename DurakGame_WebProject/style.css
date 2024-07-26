@@ -5,7 +5,7 @@ html {
 body {
   font-family: "Oswald", sans-serif;
   display: grid;
-  grid-template-rows: 70% 35%;
+  grid-template-rows: 20% 51% 35%;
   grid-template-columns: 100%;
   justify-items: center;
   background: url("invCArds-removebg-preview.png");
@@ -32,6 +32,14 @@ body {
   grid-template-columns: 14% 14% 14% 14% 14% 14%;
 }
 
+.battle-field {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 25% 12% 12% 12% 12% 12% 12%;
+
+  width: 55%;
+}
+
 .yourCards {
   display: grid;
   grid-template-rows: 90%;
@@ -46,11 +54,16 @@ body {
 }
 
 .Acts {
+  position: absolute;
+
   cursor: pointer;
   font-family: "Oswald", sans-serif;
   transition: 0.3s;
-  width: 80%;
-  height: 40%;
+
+  width: 11%;
+  height: 100px;
+  margin-right: 80px;
+
   background-color: rgb(255, 255, 255);
   color: rgb(0, 174, 255);
   font-size: 25px;
@@ -66,7 +79,7 @@ body {
   transition: 0s;
 }
 
-.card1, .card2, .card3, .card4, .card5, .card6, .card7, .card8, .card9, .card10, .card11, .card12 {
+.card1, .card2, .card3, .card4, .card5, .card6, .card7, .card8, .card9, .card10, .card11, .card12, .card13, .card14 {
   background-color: rgb(109, 109, 109);
   width: 100px;
   height: 150px;
@@ -74,10 +87,20 @@ body {
   margin: 20px;
 }
 
+.card14 {
+  transform: rotate(90deg) translate(-20px, -20px);
+  bottom: 150px;
+  left: 30px;
+}
+
 .register-button-container {
   position: absolute;
+  display: grid;
+  grid-template-columns: 60% 60%;
+  column-gap: 10px;
+
   top: 10px;
-  right: 10px;
+  right: 100px;
 }
 
 #usernameContainer {
@@ -87,8 +110,6 @@ body {
   color: white;
   font-size: 20px;
 }
-
-/* Add to style.css */
 
 /* Style for the container in the corner */
 #userInfoContainer {
@@ -117,6 +138,22 @@ body {
   flex-direction: column;
 }
 
+.username-checkmark-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* Align items vertically */
+}
+
+.username {
+  margin-right: 1px; /* Space between username and checkmark */
+}
+
+.verified-checkmark {
+  width: 16px; /* Adjust size as needed */
+  height: 16px; /* Adjust size as needed */
+  margin-bottom: -4.5px;
+}
+
 .username {
   font-weight: bold;
   font-size: 16px;
@@ -136,4 +173,63 @@ body {
 .cards-count {
   font-size: 14px;
   color: #666;
+  margin-bottom: 5px;
+}
+
+/* New styles for buttons with light blue background and cool click animation */
+.log-off-btn, .my-account-btn, .messages-btn {
+  font-size: 11px;
+  padding: 6px 5px;
+  border: none;
+  border-radius: 140px;
+  cursor: pointer;
+  background-color: rgb(0, 174, 255); /* Light blue background */
+  color: white;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 4px;
+}
+
+.log-off-btn:hover, .my-account-btn:hover, .messages-btn:hover {
+  background-color: #007BFF; /* Darker blue on hover */
+}
+
+.log-off-btn:active, .my-account-btn:active, .messages-btn:active {
+  transform: scale(0.95);
+  background-color: #0056b3; /* Even darker blue on click */
+}
+
+#registerBtn, #loginBtn {
+  font-family: "Oswald", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+
+  width: 100%;
+  height: 100%;
+
+  margin-bottom: 15px;
+  margin-left: 30px;
+  border-radius: 5px;
+  transition: 0.3s;
+
+  border: none;
+  cursor: pointer;
+}
+
+#registerBtn {
+  border: none;
+  background-color: rgb(0, 119, 255);
+  color: white;
+}
+
+#registerBtn:hover {
+  background-color: rgb(0, 90, 192);
+}
+
+#loginBtn:hover {
+  background-color: rgb(196, 196, 196);
+}
+
+#loginBtn {
+  color: rgb(0, 119, 255);
 }

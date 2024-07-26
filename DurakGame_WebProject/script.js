@@ -22,14 +22,27 @@ let card10 = document.querySelector(".card10");
 let card11 = document.querySelector(".card11");
 let card12 = document.querySelector(".card12");
 
+// battlefield
+const battlefield = document.querySelector(".battle-field");
+
 let cards = [card7, card8, card9, card10, card11, card12];
 let cards2 = [card1, card2, card3, card4, card5, card6];
 
+// -------------- game --------------
+let cardPushed = false;
+
 let pushing = cards.filter(function (item) {
-  item.addEventListener("mousedown", function () {
+  item.addEventListener("mousedown", function (event) {
+    for (let i = 0; i < 6; i++) {cards[i].style.backgroundColor = "gray"};
     item.style.backgroundColor = "black";
-    let pushing2 = cards2.filter(function (item) {
-      // This block currently does nothing but can be used for additional logic
+    cardPushed = true;
+
+    battlefield.addEventListener("click", function () {
+      if (cardPushed == true &&  item.style.backgroundColor == "black") {
+        item.remove();
+        battlefield.innerHTML += `<div class="${item.classList}"><div>`;
+        cardPushed = false;
+      }
     });
   });
 });

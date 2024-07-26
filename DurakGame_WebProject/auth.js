@@ -15,7 +15,7 @@ import {
 import { auth, db } from "./firebase.js";
 
 const storage = getStorage();
-const DEFAULT_PHOTO_PATH = "path/to/default/userphotocards.jpg";
+const DEFAULT_PHOTO_PATH = "defaultphoto/userphotocards.jpg";
 
 const registerUser = async (email, password, username) => {
   try {
@@ -26,14 +26,8 @@ const registerUser = async (email, password, username) => {
     );
     const user = userCredential.user;
 
-    const defaultPhotoRef = ref(
-      storage,
-      `users/${user.uid}/userphotocards.jpg`
-    );
-    const response = await fetch(DEFAULT_PHOTO_PATH);
-    const photoBlob = await response.blob();
+    const defaultPhotoRef = ref(storage, DEFAULT_PHOTO_PATH);
 
-    await uploadBytes(defaultPhotoRef, photoBlob);
     const photoURL = await getDownloadURL(defaultPhotoRef);
 
     const userData = {

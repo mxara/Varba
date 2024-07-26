@@ -1,0 +1,128 @@
+.bg2 {
+    background: url("Untitled.png");
+    background-size: 120px;
+}
+
+#userInfoContainer {
+    width: 800px;
+    height: 500px;
+    top: 25%;
+    right: 30%;
+    border-width: 0px;
+    box-shadow: 0px 7px 15px 3px rgba(0, 0, 0, 0.4196078431);
+}
+
+.profile-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 90% 30%;
+}
+
+.profileBG {
+    background-color: rgb(202, 202, 202);
+
+    height: 100%;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}/*# sourceMappingURL=acount.css.map */
+
+#profilePhoto {
+    transform: translateY(-30px) scale(1.5);
+
+    border-color: white;
+    border-width: 6px;
+
+    margin-left: 60px;
+}
+
+.username-info {
+    display: grid;
+    grid-template-rows: 35% 30% 20%;
+}
+
+.username {
+    color: black;
+    font-size: 35px;
+    font-weight: 500;
+
+    font-family: "Oswald", sans-serif;
+    border-width: 0px;
+    margin-left: 47px;
+}
+
+#ProfileCards {
+    margin-left: 50px;
+    font-size: 20px;
+}
+
+.edit-btn, .log-off-btn, .save-btn, .choose-photo-btn {
+    width: 20%;
+    height: 80%;
+
+    margin-bottom: 15px;
+    margin-left: 30px;
+    border-radius: 5px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.edit-btn, .choose-photo-btn {
+    border-width: 0px;
+
+    background-color: rgb(223, 223, 223);
+    color: rgb(0, 119, 255);
+}
+
+.save-btn {
+    border-width: 0px;
+
+    color: rgb(223, 223, 223);
+    background-color: rgb(0, 119, 255);
+}
+
+.edit-btn:hover, .choose-photo-btn:hover {
+    background-color: rgb(185, 185, 185);
+}
+
+.EditUsername {
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+
+    border: solid rgb(0, 140, 255);
+    color: rgb(0, 140, 255);
+
+    border-width: 0px;
+    border-bottom-width: 3px;
+    font-size: 30px;
+    width: 20%;
+}
+
+.EditUsername:focus {
+    outline: none;
+}
+
+#UsernameEditLabel {
+    color: rgb(94, 94, 94);
+    font-size: 20px;
+}
+
+.save-btn, .choose-photo-btn {
+    font-family: "Oswald", sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+
+    width: 80%;
+}
+
+.editButtons {
+    display: grid;
+    grid-template-columns: 30% 30%;
+    grid-template-rows: 60px;
+
+    margin-top: 20px;
+}
+
+#photoInput {
+    width: 30%;
+}
